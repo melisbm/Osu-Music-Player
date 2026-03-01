@@ -1,46 +1,30 @@
 ﻿using System.IO;
 using System;
 using NAudio.Wave;
-
+using osu_music;
 class Program
 {
     static void Main()
     {
+
         string currentUsername = Environment.GetEnvironmentVariable("USERNAME");
 
         string osuPath = $@"C:\Users\{currentUsername}\AppData\Local\osu!";
 
         string songsPath = osuPath + "\\Songs";
-        string songPath;
-        string[] songs = Directory.GetDirectories(songsPath);
 
-        Random rnd = new Random();
+        OsuSongLibrary lib = new OsuSongLibrary(osuPath);
 
+        
 
         while (true)
         {
-            Console.Clear();
-            int num = rnd.Next(0, songs.Length);
 
-            songPath = songs[num];
-            
-            string[] songInfos = Directory.GetFiles(songPath, "*.osu");
+            OsuSong song = lib.randomSong();
 
-            int num2 = rnd.Next(0, songInfos.Length);
+            Console.WriteLine($"Now Playing: {song.Title}");
 
-            string songInfo = songInfos[num2];
-
-
-            string[] songInfoLines = File.ReadAllLines(songInfo);
-
-            int index = songInfoLines[3].IndexOf("AudioFilename: ");
-            string res = songInfoLines[3].Substring(index + "AudioFilename: ".Length);
-
-            string songName = Path.GetFileName(songPath);
-
-            Console.WriteLine($"Now Playing: {songName}");
-
-            using (var audioFile = new AudioFileReader(Path.Combine(songPath, res)))
+            using (var audioFile = new AudioFileReader(song.AudioFiles[0]))
             using (var outputDevice = new WaveOutEvent())
             {
                 outputDevice.Init(audioFile);
