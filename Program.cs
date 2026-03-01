@@ -1,50 +1,30 @@
-﻿using System.IO;
-using System;
+﻿using System;
+using System.Threading;
 using NAudio.Wave;
+using osu_music;
+using SoundTouch.Net.NAudioSupport;
 
 class Program
 {
     static void Main()
     {
         string currentUsername = Environment.GetEnvironmentVariable("USERNAME");
-
         string osuPath = $@"C:\Users\{currentUsername}\AppData\Local\osu!";
-
-        string songsPath = osuPath + "\\Songs";
-        string songPath;
-        string[] songs = Directory.GetDirectories(songsPath);
-
-        Random rnd = new Random();
-
+        OsuSongLibrary lib = new OsuSongLibrary(osuPath);
 
         while (true)
         {
-            Console.Clear();
-            int num = rnd.Next(0, songs.Length);
-
-            songPath = songs[num];
-            
-            string[] songInfos = Directory.GetFiles(songPath, "*.osu");
-
-            int num2 = rnd.Next(0, songInfos.Length);
-
-            string songInfo = songInfos[num2];
-
-
-            string[] songInfoLines = File.ReadAllLines(songInfo);
-
-            int index = songInfoLines[3].IndexOf("AudioFilename: ");
-            string res = songInfoLines[3].Substring(index + "AudioFilename: ".Length);
-
-            string songName = Path.GetFileName(songPath);
-
-            Console.WriteLine($"Now Playing: {songName}");
+            OsuSong song = lib.randomSong();
+            Console.WriteLine($"Now Playing: {song.Title}");
 
             using (var audioFile = new AudioFileReader(Path.Combine(songPath, res)))
             using (var outputDevice = new WaveOutEvent())
             {
-                outputDevice.Init(audioFile);
+                var soundTouch = new SoundTouchWaveProvider(audioFile);
+                soundTouch.Tempo = 1.0f;
+                outputDevice.Init(soundTouch);
                 outputDevice.Play();
+
                 while (outputDevice.PlaybackState == PlaybackState.Playing)
                 {
                     if (Console.KeyAvailable)
@@ -67,17 +47,15 @@ class Program
                                 }
                             }
                         }
+                        else if (key == ConsoleKey.D)
+                        {
+                            soundTouch.Tempo = 1.5f;
+                        }
                     }
                     Thread.Sleep(1000 / 60);
                 }
-
                 Console.WriteLine("Stopped playing");
             }
-
         }
     }
-
 }
-
-
-
