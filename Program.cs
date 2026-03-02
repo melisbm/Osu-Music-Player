@@ -27,7 +27,7 @@ class Program
                 if (Console.KeyAvailable)
                 {
                     var key = Console.ReadKey(true).Key;
-                    if (key == ConsoleKey.Spacebar)
+                    if (key == ConsoleKey.Spacebar || key == ConsoleKey.Enter)
                     {
                         pc.Dispose();
                         break;
