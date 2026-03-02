@@ -23,10 +23,45 @@ namespace osu_music
             OutputDevice = outputDevice;
 
             OutputDevice.Volume = Volume;
-            _soundTouch.Tempo = 1.0f;
 
             OutputDevice.Init(_soundTouch);
             OutputDevice.Play();
+        }
+
+        public PlaybackController(WaveOutEvent outputDevice)
+        {
+            OutputDevice = outputDevice;
+
+            OutputDevice.Volume = Volume;
+        }
+
+        public void PlaySong(AudioFileReader audioFile)
+        {
+            _soundTouch = new SoundTouchWaveProvider(audioFile);
+
+            if (OutputDevice != null && OutputDevice.PlaybackState != PlaybackState.Stopped)
+            {
+                OutputDevice.Stop();
+            }
+
+            if (OutputDevice != null)
+            {
+                OutputDevice.Init(_soundTouch);
+                OutputDevice.Play();
+            }
+        }
+
+        public void Stop()
+        {
+            if (OutputDevice != null)
+            {
+                OutputDevice.Stop();
+            }
+
+            if (_soundTouch != null)
+            {
+                _soundTouch.Clear();
+            }
         }
 
         public void playbackSpeed(float speed)
@@ -71,7 +106,7 @@ namespace osu_music
 
         public bool isPlaying()
         {
-            return OutputDevice.PlaybackState == PlaybackState.Playing;
+            return OutputDevice != null && OutputDevice.PlaybackState == PlaybackState.Playing;
         }
 
         public void Dispose()
