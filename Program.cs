@@ -17,45 +17,42 @@ class Program
             OsuSong song = lib.randomSong();
             Console.WriteLine($"Now Playing: {song.Title}");
 
-            using (var audioFile = new AudioFileReader(Path.Combine(songPath, res)))
-            using (var outputDevice = new WaveOutEvent())
-            {
-                var soundTouch = new SoundTouchWaveProvider(audioFile);
-                soundTouch.Tempo = 1.0f;
-                outputDevice.Init(soundTouch);
-                outputDevice.Play();
+            var audioFile = new AudioFileReader(song.AudioFiles[0]);
+            var outputDevice = new WaveOutEvent();
 
-                while (outputDevice.PlaybackState == PlaybackState.Playing)
+            PlaybackController pc = new PlaybackController(audioFile, outputDevice);
+
+            while (pc.isPlaying())
+            {
+                if (Console.KeyAvailable)
                 {
-                    if (Console.KeyAvailable)
+                    var key = Console.ReadKey(true).Key;
+                    if (key == ConsoleKey.N)
+                        break;
+                    else if (key == ConsoleKey.P)
                     {
-                        var key = Console.ReadKey(true).Key;
-                        if (key == ConsoleKey.N)
-                            break;
-                        else if (key == ConsoleKey.P)
+                        outputDevice.Pause();
+                        Console.WriteLine("Paused. Press R to resume.");
+                        while (true)
                         {
-                            outputDevice.Pause();
-                            Console.WriteLine("Paused. Press R to resume.");
-                            while (true)
+                            var resumeKey = Console.ReadKey(true).Key;
+                            if (resumeKey == ConsoleKey.R)
                             {
-                                var resumeKey = Console.ReadKey(true).Key;
-                                if (resumeKey == ConsoleKey.R)
-                                {
-                                    outputDevice.Play();
-                                    Console.WriteLine("Unpaused");
-                                    break;
-                                }
+                                outputDevice.Play();
+                                Console.WriteLine("Unpaused");
+                                break;
                             }
                         }
-                        else if (key == ConsoleKey.D)
-                        {
-                            soundTouch.Tempo = 1.5f;
-                        }
                     }
-                    Thread.Sleep(1000 / 60);
+                    else if (key == ConsoleKey.D)
+                    {
+                        pc.playbackSpeed(1.5f);
+                    }
                 }
-                Console.WriteLine("Stopped playing");
+                Thread.Sleep(1000 / 60);
             }
+            Console.WriteLine("Stopped playing");
         }
     }
+
 }
