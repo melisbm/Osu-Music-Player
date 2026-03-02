@@ -12,6 +12,8 @@ namespace osu_music
         private WaveOutEvent OutputDevice { get; set; }
         public float PlaybackSpeed = 1.0f;
         public float Volume { get; set; } = 0.5f;
+        private bool _isDT = false;
+        public bool IsDT { get; }
 
         public PlaybackController(AudioFileReader audioFile, WaveOutEvent outputDevice)
         {
@@ -28,6 +30,36 @@ namespace osu_music
         public void playbackSpeed(float speed)
         {
             _soundTouch.Tempo = speed;
+        }
+
+        public void DT()
+        {
+            if (!_isDT)
+            {
+                _soundTouch.Tempo = 1.5f;
+                _isDT = true;
+            }
+            else
+            {
+                _soundTouch.Tempo = 1.0f;
+                _isDT = false;
+            }
+        }
+
+        public void NC()
+        {
+            if (!_isDT)
+            {
+                _soundTouch.Tempo = 1.5f;
+                _soundTouch.Pitch = 1.5f;
+                _isDT = true;
+            }
+            else
+            {
+                _soundTouch.Tempo = 1.0f;
+                _soundTouch.Pitch = 1.0f;
+                _isDT = false;
+            }
         }
 
         public bool isPlaying()

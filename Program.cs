@@ -27,7 +27,7 @@ class Program
                 if (Console.KeyAvailable)
                 {
                     var key = Console.ReadKey(true).Key;
-                    if (key == ConsoleKey.N)
+                    if (key == ConsoleKey.Spacebar)
                     {
                         pc.Dispose();
                         break;
@@ -50,7 +50,11 @@ class Program
                     }
                     else if (key == ConsoleKey.D)
                     {
-                        pc.playbackSpeed(1.5f);
+                        pc.DT();
+                    }
+                    else if (key == ConsoleKey.N)
+                    {
+                        pc.NC();
                     }
                     else if (key == ConsoleKey.UpArrow)
                     {
