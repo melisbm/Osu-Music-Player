@@ -52,6 +52,14 @@ class Program
                     {
                         pc.playbackSpeed(1.5f);
                     }
+                    else if (key == ConsoleKey.UpArrow)
+                    {
+                        Console.WriteLine($"Volume: {pc.HigherVolume():P0}");
+                    }
+                    else if (key == ConsoleKey.DownArrow)
+                    {
+                        Console.WriteLine($"Volume: {pc.LowerVolume():P0}");
+                    }
                 }
                 Thread.Sleep(1000 / 60);
             }
