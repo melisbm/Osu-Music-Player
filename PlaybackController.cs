@@ -32,5 +32,15 @@ namespace osu_music
         {
             return OutputDevice.PlaybackState == PlaybackState.Playing;
         }
+
+        public void Dispose()
+        {
+            if (OutputDevice != null)
+            {
+                OutputDevice.Stop();
+                OutputDevice.Dispose();
+                OutputDevice = null;
+            }
+        }
     }
 }

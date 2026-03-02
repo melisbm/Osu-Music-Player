@@ -28,7 +28,11 @@ class Program
                 {
                     var key = Console.ReadKey(true).Key;
                     if (key == ConsoleKey.N)
+                    {
+                        pc.Dispose();
                         break;
+                    }
+                        
                     else if (key == ConsoleKey.P)
                     {
                         outputDevice.Pause();
