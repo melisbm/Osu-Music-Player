@@ -20,9 +20,9 @@ class Program
 
         while (true)
         {
+            Console.Clear();
             OsuSong song = lib.randomSong();
             Console.WriteLine($"Now Playing: {song.Title}");
-
 
             AudioFileReader audioFile = new AudioFileReader(song.AudioFiles[0]);
 

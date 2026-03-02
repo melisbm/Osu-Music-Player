@@ -27,11 +27,11 @@ namespace osu_music
 
                     case ConsoleKey.P:
                         outputDevice.Pause();
-                        Console.WriteLine("Paused. Press R to resume.");
+                        Console.WriteLine("Paused");
                         while (true)
                         {
                             var resumeKey = Console.ReadKey(true).Key;
-                            if (resumeKey == ConsoleKey.R)
+                            if (resumeKey == ConsoleKey.P)
                             {
                                 outputDevice.Play();
                                 Console.WriteLine("Unpaused");
