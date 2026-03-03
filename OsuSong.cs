@@ -12,28 +12,30 @@ namespace osu_music
         public string[] AudioFiles { get; }
         public string[] OsuFiles { get; }
 
+        private Random _rnd = new Random();
+
         public OsuSong(string songPath)
         {
             Path = songPath;
 
-            OsuFiles = getOsuFiles();
-            AudioFiles = getAudioFiles();
+            OsuFiles = GetOsuFiles();
+            AudioFiles = GetAudioFiles();
 
-            Title = getSongTitle();
-            TitleUnicode = getSongUnicodeTitle();
+            Title = SongTitle();
+            TitleUnicode = SongUnicodeTitle();
         }
 
-        private string[] getOsuFiles()
+        private string[] GetOsuFiles()
         {
             return Directory.GetFiles(Path, "*.osu");
         }
 
-        public string[] getOsuFiles(string songPath)
+        public string[] GetOsuFiles(string songPath)
         {
             return Directory.GetFiles(songPath, "*.osu");
         }
 
-        private string[] getAudioFiles()
+        private string[] GetAudioFiles()
         {
             string[] audioFilesArr = new string[OsuFiles.Length];
 
@@ -43,16 +45,33 @@ namespace osu_music
 
                 string keyWord = "AudioFilename: ";
 
-                int startIndex = osuFileLines[3].IndexOf(keyWord);
-                string audioFile = osuFileLines[3].Substring(startIndex + keyWord.Length);
+                string? audioFile = null;
 
-                audioFilesArr[i] = System.IO.Path.Combine(Path, audioFile);
+                foreach (string line in osuFileLines)
+                {
+                    if (line.IndexOf(keyWord) != -1)
+                    {
+                        int startIndex = line.IndexOf(keyWord);
+                        audioFile = line.Substring(startIndex + keyWord.Length);
+
+                        break;
+                    }
+                }
+
+                if(audioFile == null)
+                {
+                    audioFilesArr[i] = null;
+                }
+                else
+                {
+                    audioFilesArr[i] = System.IO.Path.Combine(Path, audioFile);
+                }
             }
 
             return audioFilesArr;
         }
 
-        private string getSongUnicodeTitle()
+        private string SongUnicodeTitle()
         {
             string titileUnicode = "Unknown Song";
 
@@ -74,7 +93,7 @@ namespace osu_music
             return titileUnicode;
         }
 
-        private string getSongTitle()
+        private string SongTitle()
         {
             string titileUnicode = "Unknown Song";
 
@@ -94,6 +113,28 @@ namespace osu_music
             }
 
             return titileUnicode;
+        }
+
+        //FIX: Add seen array to check if all audio files dont exist
+        //ADD: .ogg support
+        public string GetRandomAudio()
+        {
+            int randomIndex = _rnd.Next(AudioFiles.Length);
+            int count = 0;
+
+            while (count < 300)
+            {
+                if (File.Exists(AudioFiles[randomIndex]) && System.IO.Path.GetExtension(AudioFiles[randomIndex]) != ".ogg")
+                {
+                    return AudioFiles[randomIndex];
+                }
+                
+
+                randomIndex = _rnd.Next(AudioFiles.Length);
+                count++;
+            }
+
+            return null;
         }
     }
 }

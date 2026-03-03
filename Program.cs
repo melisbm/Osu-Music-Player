@@ -8,6 +8,7 @@ class Program
 {
     static void Main()
     {
+        Console.WriteLine("Loading...");
         string currentUsername = Environment.GetEnvironmentVariable("USERNAME");
         string osuPath = $@"C:\Users\{currentUsername}\AppData\Local\osu!";
         OsuSongLibrary lib = new OsuSongLibrary(osuPath);
@@ -21,10 +22,16 @@ class Program
         while (true)
         {
             Console.Clear();
-            OsuSong song = lib.randomSong();
+            OsuSong song = lib.RandomSong();
             Console.WriteLine($"Now Playing: {song.Title}");
+            string randomAudio = song.GetRandomAudio();
 
-            AudioFileReader audioFile = new AudioFileReader(song.AudioFiles[0]);
+            while(randomAudio == null)
+            {
+                song = lib.RandomSong();
+                randomAudio = song.GetRandomAudio();
+            }
+            AudioFileReader audioFile = new AudioFileReader(randomAudio);
 
             playbackController.PlaySong(audioFile);
 

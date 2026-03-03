@@ -5,10 +5,15 @@
 		<RootNamespace>osu_music</RootNamespace>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<ApplicationIcon>icon.ico</ApplicationIcon>
+		<AssemblyTitle>Osu! Music Player</AssemblyTitle>
 	</PropertyGroup>
 	<ItemGroup>
-	  <PackageReference Include="NAudio" Version="1.9.0" />
-	  <PackageReference Include="SoundTouch.Net" Version="2.3.2" />
-	  <PackageReference Include="SoundTouch.Net.NAudioSupport" Version="2.3.2" />
+	  <Content Include="icon.ico" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="NAudio" Version="1.9.0" />
+		<PackageReference Include="SoundTouch.Net" Version="2.3.2" />
+		<PackageReference Include="SoundTouch.Net.NAudioSupport" Version="2.3.2" />
 	</ItemGroup>
 </Project>

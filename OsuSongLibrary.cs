@@ -18,7 +18,7 @@ namespace osu_music
             OsuPath = osuPath;
             SongsPath = System.IO.Path.Combine(osuPath, "Songs");
 
-            string[] songsPathList = getSongsPathList();
+            string[] songsPathList = SongsPathList();
 
             OsuSongs = new OsuSong[songsPathList.Length];
 
@@ -29,17 +29,17 @@ namespace osu_music
 
         }
 
-        private string[] getSongsPathList()
+        private string[] SongsPathList()
         {
             return Directory.GetDirectories(SongsPath);
         }
 
-        public string[] getSongsPathList(string path)
+        public string[] SongsPathList(string path)
         {
             return Directory.GetDirectories(path);
         }
 
-        public OsuSong randomSong()
+        public OsuSong RandomSong()
         {
             int randomSongIndex = _rnd.Next(0, OsuSongs.Length);
 
