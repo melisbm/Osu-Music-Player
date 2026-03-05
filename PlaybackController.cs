@@ -71,6 +71,8 @@ namespace osu_music
 
         public void DT()
         {
+            _soundTouch.Clear();
+
             _isNC = false;
             _soundTouch.Pitch = 1.0f;
             if (!_isDT)
@@ -83,11 +85,12 @@ namespace osu_music
                 _soundTouch.Tempo = 1.0f;
                 _isDT = false;
             }
-            _soundTouch.Clear();
         }
 
         public void NC()
         {
+            _soundTouch.Clear();
+
             _isDT = false;
             if (!_isNC)
             {
@@ -101,7 +104,7 @@ namespace osu_music
                 _soundTouch.Pitch = 1.0f;
                 _isNC = false;
             }
-            _soundTouch.Clear();
+            
         }
 
         public bool isPlaying()
