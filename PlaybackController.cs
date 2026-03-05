@@ -14,8 +14,8 @@ namespace osu_music
         public float Volume { get; set; } = 0.5f;
         private bool _isDT = false;
         private bool _isNC = false;
-        public bool IsDT { get; }
-        public bool IsNC { get; }
+        public bool IsDT => _isDT;
+        public bool IsNC => _isNC;
 
         public PlaybackController(AudioFileReader audioFile, WaveOutEvent outputDevice)
         {
@@ -38,6 +38,22 @@ namespace osu_music
         public void PlaySong(AudioFileReader audioFile)
         {
             _soundTouch = new SoundTouchWaveProvider(audioFile);
+
+            if (_isNC)
+            {
+                _soundTouch.Tempo = 1.5f;
+                _soundTouch.Pitch = 1.5f;
+            }
+            else if (_isDT)
+            {
+                _soundTouch.Pitch = 1.0f;
+                _soundTouch.Tempo = 1.5f;
+            }
+            else
+            {
+                _soundTouch.Tempo = 1.0f;
+                _soundTouch.Pitch = 1.0f;
+            }
 
             if (OutputDevice != null && OutputDevice.PlaybackState != PlaybackState.Stopped)
             {
@@ -89,6 +105,7 @@ namespace osu_music
 
         public void NC()
         {
+            OutputDevice.Stop();
             _soundTouch.Clear();
 
             _isDT = false;
@@ -104,7 +121,9 @@ namespace osu_music
                 _soundTouch.Pitch = 1.0f;
                 _isNC = false;
             }
-            
+
+            OutputDevice.Play();
+
         }
 
         public bool isPlaying()
