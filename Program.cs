@@ -12,6 +12,7 @@ class Program
         string currentUsername = Environment.GetEnvironmentVariable("USERNAME");
         string osuPath = $@"C:\Users\{currentUsername}\AppData\Local\osu!";
         OsuSongLibrary lib = new OsuSongLibrary(osuPath);
+        Console.WriteLine("something");
 
         
         InputManager inputManager = new InputManager();

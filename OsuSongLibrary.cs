@@ -22,9 +22,10 @@ namespace osu_music
 
             OsuSongs = new OsuSong[songsPathList.Length];
 
-            for(int i = 0; i < OsuSongs.Length; i++)
-            {
-                OsuSongs[i] = new OsuSong(songsPathList[i]);
+            for (int i = 0; i < OsuSongs.Length; i++) {
+                OsuSong song = new OsuSong(songsPathList[i]);
+                OsuSongs[i] = song;
+                Console.WriteLine($"Importing song #{i + 1}: {song.Title}");
             }
 
         }

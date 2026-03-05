@@ -75,6 +75,11 @@ namespace osu_music
         {
             string titileUnicode = "Unknown Song";
 
+            if(OsuFiles.Length == 0)
+            {
+                return titileUnicode;
+            }
+
             string[] osuFileLines = File.ReadAllLines(OsuFiles[0]);
 
             string keyWord = "TitleUnicode:";
@@ -96,6 +101,11 @@ namespace osu_music
         private string SongTitle()
         {
             string titileUnicode = "Unknown Song";
+
+            if (OsuFiles.Length == 0)
+            {
+                return titileUnicode;
+            }
 
             string[] osuFileLines = File.ReadAllLines(OsuFiles[0]);
 
