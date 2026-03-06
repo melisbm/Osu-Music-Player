@@ -1,4 +1,0 @@
-- press L to loop
-- fix input lag
-- Could not find file 'C:\Users\mique\AppData\Local\osu!\Songs\1812414 Various Artists - CS-0 Jump Training 7\aaakuuhaku.mp3'.'
-- Add .ogg support
