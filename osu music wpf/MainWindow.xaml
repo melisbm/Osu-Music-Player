@@ -10,6 +10,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -25,6 +26,12 @@
                FontSize="24"
                HorizontalAlignment="Center"
                Grid.Row="1"/>
+
+        <TextBlock Name="TimeLine"
+               Text="00:00 - 00:00"
+               FontSize="24"
+               HorizontalAlignment="Center"
+               Grid.Row="3"/>
 
         <StackPanel Orientation="Horizontal"
                 HorizontalAlignment="Center"

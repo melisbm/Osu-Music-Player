@@ -178,5 +178,7 @@ namespace osu_music
 
             return this.Volume;
         }
+
+        
     }
 }

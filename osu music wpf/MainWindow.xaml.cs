@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace osu_music_wpf
 {
@@ -20,6 +21,7 @@ namespace osu_music_wpf
         private OsuSongLibrary _lib;
         AudioFileReader _audioFile;
         WaveOutEvent _outputDevice;
+        private DispatcherTimer _timer;
         public MainWindow()
         {
             InitializeComponent();
@@ -59,9 +61,11 @@ namespace osu_music_wpf
             _audioFile = new AudioFileReader(randomAudio);
 
             _playbackController.PlaySong(_audioFile);
-
-            
-
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromSeconds(1);
+            _timer.Tick += Timer_Tick;
+            _timer.Start();
+            TimeLine.Text = $"{_outputDevice.GetPosition()}";
         }
 
         private void btna_Click(object sender, RoutedEventArgs e)
@@ -93,6 +97,16 @@ namespace osu_music_wpf
                 _audioFile = new AudioFileReader(_song.GetRandomAudio());
                 _playbackController.PlaySong(_audioFile);
                 SongName.Text = $"Now Playing: {_song.Title}";
+            }
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            if (_audioFile != null)
+            {
+                var current = _audioFile.CurrentTime;
+                var total = _audioFile.TotalTime;
+                TimeLine.Text = $"{current:mm\\:ss} / {total:mm\\:ss}";
             }
         }
     }
