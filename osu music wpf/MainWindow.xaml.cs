@@ -64,20 +64,12 @@ namespace osu_music_wpf
 
         }
 
-        private void btn_Click(object sender, RoutedEventArgs e)
+        private void btna_Click(object sender, RoutedEventArgs e)
         {
             _playbackController.Stop();
             _audioFile.Dispose();
             
             _song = _lib.RandomSong();
-            String songAudio = _song.GetRandomAudio();
-            while(songAudio == null)
-            {
-                _song = _lib.RandomSong();
-                songAudio = _song.GetRandomAudio();
-            }
-            _audioFile = new AudioFileReader(songAudio);
-            _playbackController.PlaySong(_audioFile);
             SongName.Text = $"Now Playing: {_song.Title}";
 
         }

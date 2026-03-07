@@ -31,11 +31,11 @@
                 Grid.Row="3"
                 Margin="0,20">
 
-            <Button Name="btn"
+            <Button Name="btna"
                 Content="Next Song"
                 Width="200"
                 Height="50"
-                Click="btn_Click"/>
+                Click="btna_Click"/>
 
             <Button Name="btnDT"
                 Content="DT"

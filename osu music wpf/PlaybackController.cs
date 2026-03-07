@@ -120,7 +120,6 @@ namespace osu_music
 
         public void NC()
         {
-            OutputDevice.Stop();
             _soundTouch.Clear();
 
             _isDT = false;
@@ -136,9 +135,6 @@ namespace osu_music
                 _soundTouch.Pitch = 1.0f;
                 _isNC = false;
             }
-
-            OutputDevice.Play();
-
         }
 
         public bool isPlaying()
