@@ -58,13 +58,20 @@
                 Height="50"
                 Click="btnNC_Click"
                 Margin="5,0"/>
-            
+
             <Button Name="btnReset"
                 Content="Reset"
                 Width="80"
                 Height="50"
                 Click="btnReset_Click"
-                    Margin="5,0"/>   
+                    Margin="5,0"/>
+            <Button Name="btnPause"
+                Content="Pause"
+                Width="80"
+                Height="50"
+                Click="btnPause_Click"
+                Margin="5,0"/>
+
         </StackPanel>
     </Grid>
 </Window>

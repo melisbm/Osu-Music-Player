@@ -36,7 +36,7 @@ namespace osu_music_wpf
             a.Text = "Osu! Music Player";
 
             _outputDevice = new WaveOutEvent();
-            _outputDevice.PlaybackStopped += OnPlaybackStopped;
+            _outputDevice.PlaybackStopped += OnPlaybackEnd;
 
             _playbackController = new PlaybackController(_outputDevice);
 
@@ -64,8 +64,10 @@ namespace osu_music_wpf
         {
             _playbackController.Stop();
             _audioFile.Dispose();
-            
+
             _song = _lib.RandomSong();
+            _audioFile = new AudioFileReader(_song.GetRandomAudio());
+            _playbackController.PlaySong(_audioFile);
             SongName.Text = $"Now Playing: {_song.Title}";
 
         }
@@ -80,11 +82,17 @@ namespace osu_music_wpf
             _playbackController.NC();
         }
 
-        private void OnPlaybackStopped(object sender, StoppedEventArgs e)
+        private void OnPlaybackEnd(object sender, StoppedEventArgs e)
         {
-            if (!_playbackController.IsPlaying())
+            var current = _audioFile.CurrentTime;
+            var total = _audioFile.TotalTime;
+
+            if (!_playbackController.IsPlaying() &&
+                    (TimeSpan.Compare(current, total) == 1 ||
+                     TimeSpan.Compare(current, total) == 0))
             {
                 _playbackController.Stop();
+                _audioFile.Dispose();
                 _song = _lib.RandomSong();
                 _audioFile = new AudioFileReader(_song.GetRandomAudio());
                 _playbackController.PlaySong(_audioFile);
@@ -106,6 +114,21 @@ namespace osu_music_wpf
         {
             _playbackController.ResetTempo();
             _playbackController.ResetPitch();
+        }
+
+        private void btnPause_Click(object sender, RoutedEventArgs e)
+        {
+            if (_playbackController.IsPlaying())
+            {
+                _playbackController.Stop();
+                btnPause.Content = "Play";
+            }
+            else
+            {
+                _playbackController.Play();
+                btnPause.Content = "Pause";
+            }
+
         }
     }
 }
