@@ -1,37 +1,62 @@
 ﻿using NAudio.Wave;
 using SoundTouch.Net.NAudioSupport;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace osu_music
 {
     class PlaybackController
     {
         private SoundTouchWaveProvider _soundTouch;
-        private WaveOutEvent OutputDevice { get; set; }
-        public float PlaybackSpeed = 1.0f;
-        public float Volume { get; set; } = 0.5f;
+        private WaveOutEvent _outputDevice;
+        public WaveOutEvent OutputDevice
+        {
+            get => _outputDevice;
+            set
+            {
+                if (value == null) throw new NullReferenceException("Output Device (WaveOutEvent) must not be null.");
+                _outputDevice = value;
+            }
+        }
+
+        private float _volume = 0.5f;
+        public float Volume
+        {
+            get => _volume;
+            set
+            {
+                if (value < 0.0f)
+                {
+                    throw new ArgumentException("The volume cannot be negative.");
+                }
+
+                _volume = value;
+            }
+        }
+
+        private const float VOLUME_ADDITION = 0.05f;
+
         private bool _isDT = false;
         private bool _isNC = false;
         public bool IsDT => _isDT;
         public bool IsNC => _isNC;
 
-        public PlaybackController(AudioFileReader audioFile, WaveOutEvent outputDevice)
-        {
-            _soundTouch = new SoundTouchWaveProvider(audioFile);
-            OutputDevice = outputDevice;
+        private const float DEFAULT_TEMPO = 1.0f;
+        private const float DEFAULT_PITCH = 1.0f;
 
-            OutputDevice.Volume = Volume;
+        private const float DT_TEMPO = 1.5f;
+        private const float DT_PITCH = 1.0f;
 
-            OutputDevice.Init(_soundTouch);
-            OutputDevice.Play();
-        }
+        private const float NC_TEMPO = 1.5f;
+        private const float NC_PITCH = 1.5f;
 
         public PlaybackController(WaveOutEvent outputDevice)
         {
-            OutputDevice = outputDevice;
+            if (outputDevice == null)
+            {
+                throw new NullReferenceException("Output Device (WaveOutEvent) must not be null.");
+            }
 
+            OutputDevice = outputDevice;
             OutputDevice.Volume = Volume;
         }
 
@@ -41,127 +66,111 @@ namespace osu_music
 
             if (_isNC)
             {
-                _soundTouch.Tempo = 1.5f;
-                _soundTouch.Pitch = 1.5f;
+                _soundTouch.Tempo = NC_TEMPO;
+                _soundTouch.Pitch = NC_PITCH;
             }
             else if (_isDT)
             {
-                _soundTouch.Pitch = 1.0f;
-                _soundTouch.Tempo = 1.5f;
+                _soundTouch.Pitch = DT_PITCH;
+                _soundTouch.Tempo = DT_TEMPO;
             }
             else
             {
-                _soundTouch.Tempo = 1.0f;
-                _soundTouch.Pitch = 1.0f;
+                _soundTouch.Tempo = DEFAULT_TEMPO;
+                _soundTouch.Pitch = DEFAULT_PITCH;
             }
 
-            if (OutputDevice != null && OutputDevice.PlaybackState != PlaybackState.Stopped)
+            if (OutputDevice.PlaybackState != PlaybackState.Stopped)
             {
                 OutputDevice.Stop();
             }
 
-            if (OutputDevice != null)
-            {
-                OutputDevice.Init(_soundTouch);
-                OutputDevice.Play();
-            }
+            OutputDevice.Init(_soundTouch);
+            OutputDevice.Play();
         }
 
         public void Play()
         {
             if (_soundTouch != null)
             {
-                _soundTouch.Clear();
-            }
-
-            if (OutputDevice != null)
-            {
                 OutputDevice.Play();
             }
-
-            
         }
 
         public void Stop()
         {
-            if (OutputDevice != null)
+            if (_soundTouch != null)
             {
                 OutputDevice.Stop();
             }
-
-            if (_soundTouch != null)
-            {
-                _soundTouch.Clear();
-            }
-        }
-
-        public void playbackSpeed(float speed)
-        {
-            _soundTouch.Tempo = speed;
         }
 
         public void DT()
         {
-            _soundTouch.Clear();
+            if (_soundTouch != null)
+            {
+                _soundTouch.Clear();
 
-            _isNC = false;
-            _soundTouch.Pitch = 1.0f;
-            if (!_isDT)
-            {
-                _soundTouch.Tempo = 1.5f;
+                _soundTouch.Tempo = DT_TEMPO;
+                _soundTouch.Pitch = DT_PITCH;
+
+                _isNC = false;
                 _isDT = true;
-            }
-            else
-            {
-                _soundTouch.Tempo = 1.0f;
-                _isDT = false;
             }
         }
 
         public void NC()
         {
-            _soundTouch.Clear();
+            if (_soundTouch != null)
+            {
+                _soundTouch.Clear();
 
-            _isDT = false;
-            if (!_isNC)
-            {
-                _soundTouch.Tempo = 1.5f;
-                _soundTouch.Pitch = 1.5f;
+                _soundTouch.Tempo = NC_TEMPO;
+                _soundTouch.Pitch = NC_PITCH;
+
+                _isDT = false;
                 _isNC = true;
-            }
-            else
-            {
-                _soundTouch.Tempo = 1.0f;
-                _soundTouch.Pitch = 1.0f;
-                _isNC = false;
             }
         }
 
-        public bool isPlaying()
+        public void ResetPitch()
         {
-            return OutputDevice != null && OutputDevice.PlaybackState == PlaybackState.Playing;
+            if (_soundTouch != null)
+            {
+                _soundTouch.Pitch = DEFAULT_PITCH;
+            }
+
+            _isDT = false;
+            _isNC = false;
+        }
+
+        public void ResetTempo()
+        {
+            if (_soundTouch != null)
+            {
+                _soundTouch.Tempo = DEFAULT_TEMPO;
+            }
+
+            _isDT = false;
+            _isNC = false;
+        }
+
+        public bool IsPlaying()
+        {
+            return OutputDevice.PlaybackState == PlaybackState.Playing;
         }
 
         public void Dispose()
         {
-            if (OutputDevice != null)
-            {
-                OutputDevice.Stop();
-                OutputDevice.Dispose();
-                OutputDevice = null;
-            }
-        }
-
-        public void LowerVolume(float volume)
-        {
-            OutputDevice.Volume = volume;
+            OutputDevice.Stop();
+            OutputDevice.Dispose();
         }
 
         public float LowerVolume()
         {
-            if (this.Volume - 0.05f > 0.0f)
+            if (this.Volume - VOLUME_ADDITION > 0.0f)
             {
-                this.Volume -= 0.05f;
+                this.Volume -= VOLUME_ADDITION;
                 OutputDevice.Volume = Volume;
             }
 
@@ -170,15 +179,13 @@ namespace osu_music
 
         public float HigherVolume()
         {
-            if (this.Volume + 0.05f < 1.0f)
+            if (this.Volume + VOLUME_ADDITION < 1.0f)
             {
-                this.Volume += 0.05f;
+                this.Volume += VOLUME_ADDITION;
                 OutputDevice.Volume = Volume;
             }
 
             return this.Volume;
         }
-
-        
     }
 }

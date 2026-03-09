@@ -1,15 +1,6 @@
 ﻿using NAudio.Wave;
 using osu_music;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace osu_music_wpf
@@ -22,6 +13,7 @@ namespace osu_music_wpf
         AudioFileReader _audioFile;
         WaveOutEvent _outputDevice;
         private DispatcherTimer _timer;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -58,6 +50,7 @@ namespace osu_music_wpf
                 _song = _lib.RandomSong();
                 randomAudio = _song.GetRandomAudio();
             }
+
             _audioFile = new AudioFileReader(randomAudio);
 
             _playbackController.PlaySong(_audioFile);
@@ -65,7 +58,6 @@ namespace osu_music_wpf
             _timer.Interval = TimeSpan.FromSeconds(1);
             _timer.Tick += Timer_Tick;
             _timer.Start();
-            TimeLine.Text = $"{_outputDevice.GetPosition()}";
         }
 
         private void btna_Click(object sender, RoutedEventArgs e)
@@ -90,7 +82,7 @@ namespace osu_music_wpf
 
         private void OnPlaybackStopped(object sender, StoppedEventArgs e)
         {
-            if (!_playbackController.isPlaying())
+            if (!_playbackController.IsPlaying())
             {
                 _playbackController.Stop();
                 _song = _lib.RandomSong();
@@ -108,6 +100,12 @@ namespace osu_music_wpf
                 var total = _audioFile.TotalTime;
                 TimeLine.Text = $"{current:mm\\:ss} / {total:mm\\:ss}";
             }
+        }
+
+        private void btnReset_Click(object sender, RoutedEventArgs e)
+        {
+            _playbackController.ResetTempo();
+            _playbackController.ResetPitch();
         }
     }
 }

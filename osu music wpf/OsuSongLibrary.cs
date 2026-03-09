@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
 
 namespace osu_music
 {
@@ -25,7 +26,7 @@ namespace osu_music
             for (int i = 0; i < OsuSongs.Length; i++) {
                 OsuSong song = new OsuSong(songsPathList[i]);
                 OsuSongs[i] = song;
-                Console.WriteLine($"Importing song #{i + 1}: {song.Title}");
+                Debug.WriteLine($"Importing song #{i + 1}: {song.Title}");
             }
 
         }

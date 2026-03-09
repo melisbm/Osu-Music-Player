@@ -36,26 +36,35 @@
         <StackPanel Orientation="Horizontal"
                 HorizontalAlignment="Center"
                 Grid.Row="3"
-                Margin="0,20">
+                Margin="0,5">
 
             <Button Name="btna"
                 Content="Next Song"
                 Width="200"
                 Height="50"
-                Click="btna_Click"/>
+                Click="btna_Click"
+                    Margin="5,0"/>
 
             <Button Name="btnDT"
                 Content="DT"
                 Width="80"
                 Height="50"
                 Click="btnDT_Click"
-                Margin="10,0"/>
+                Margin="5,0"/>
 
             <Button Name="btnNC"
                 Content="NC"
                 Width="80"
                 Height="50"
-                Click="btnNC_Click"/>
+                Click="btnNC_Click"
+                Margin="5,0"/>
+            
+            <Button Name="btnReset"
+                Content="Reset"
+                Width="80"
+                Height="50"
+                Click="btnReset_Click"
+                    Margin="5,0"/>   
         </StackPanel>
     </Grid>
 </Window>
