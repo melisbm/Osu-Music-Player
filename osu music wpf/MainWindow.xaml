@@ -5,73 +5,59 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:osu_music_wpf"
         mc:Ignorable="d"
-        Title="Osu! Music Player" Height="450" Width="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+        Title="Osu! Music Player" Height="450" Width="800"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        ResizeMode="NoResize"
+        Background="Transparent"
+        WindowStartupLocation="CenterScreen">
+    <Border CornerRadius="12" Background="#3B324E">
+        <Grid>
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Border MouseLeftButtonDown="Border_MouseLeftButtonDown" CornerRadius="12,12,0,0" Background="#FF1F1A29" Margin="0,0,0,37"/>
 
-        <TextBlock Text="Osu! Music Player"
-               FontSize="24"
-               Name="a"
-               HorizontalAlignment="Center"
-               Grid.Row="0"/>
+            <TextBlock Text="Osu! Music Player"
+                       FontSize="24"
+                       Name="a"
+                       HorizontalAlignment="Center"
+                       Grid.Row="0" Foreground="White" Margin="0,30,0,0"/>
 
-        <TextBlock Name="SongName"
-               Text="Unknown song name"
-               FontSize="24"
-               HorizontalAlignment="Center"
-               Grid.Row="1"/>
+            <TextBlock Name="SongName"
+                       Text="Unknown song name"
+                       FontSize="24"
+                       HorizontalAlignment="Center"
+                       Grid.Row="1" Foreground="White"/>
 
-        <TextBlock Name="TimeLine"
-               Text="00:00 - 00:00"
-               FontSize="24"
-               HorizontalAlignment="Center"
-               Grid.Row="3"/>
+            <TextBlock Name="TimeLine"
+                       Text="00:00 - 00:00"
+                       FontSize="24"
+                       HorizontalAlignment="Center"
+                       Grid.Row="2" Foreground="White"/>
 
-        <StackPanel Orientation="Horizontal"
-                HorizontalAlignment="Center"
-                Grid.Row="3"
-                Margin="0,5">
+            <Slider Name="playbackbar"
+                    Grid.Row="3"
+                    Minimum="0" Maximum="1" Value="0"
+                    Margin="20,8"/>
 
-            <Button Name="btna"
-                Content="Next Song"
-                Width="200"
-                Height="50"
-                Click="btna_Click"
-                    Margin="5,0"/>
-
-            <Button Name="btnDT"
-                Content="DT"
-                Width="80"
-                Height="50"
-                Click="btnDT_Click"
-                Margin="5,0"/>
-
-            <Button Name="btnNC"
-                Content="NC"
-                Width="80"
-                Height="50"
-                Click="btnNC_Click"
-                Margin="5,0"/>
-
-            <Button Name="btnReset"
-                Content="Reset"
-                Width="80"
-                Height="50"
-                Click="btnReset_Click"
-                    Margin="5,0"/>
-            <Button Name="btnPause"
-                Content="Pause"
-                Width="80"
-                Height="50"
-                Click="btnPause_Click"
-                Margin="5,0"/>
-
-        </StackPanel>
-    </Grid>
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Grid.Row="4"
+                        Margin="0,5">
+                <Button Name="btna"    Content="Next Song" Width="200" Height="50" Click="btna_Click"    Margin="5,0" Cursor="Hand"/>
+                <Button Name="btnDT"   Content="DT"        Width="80"  Height="50" Click="btnDT_Click"   Margin="5,0" Cursor="Hand"/>
+                <Button Name="btnNC"   Content="NC"        Width="80"  Height="50" Click="btnNC_Click"   Margin="5,0" Cursor="Hand"/>
+                <Button Name="btnReset" Content="Reset"    Width="80"  Height="50" Click="btnReset_Click" Margin="5,0" Cursor="Hand"/>
+                <Button Name="btnPause" Content="Pause"    Width="80"  Height="50" Click="btnPause_Click" Margin="5,0" Cursor="Hand"/>
+            </StackPanel>
+        </Grid>
+    </Border>
 </Window>

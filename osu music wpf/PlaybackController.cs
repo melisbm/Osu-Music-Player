@@ -64,6 +64,7 @@ namespace osu_music
         {
             _soundTouch = new SoundTouchWaveProvider(audioFile);
 
+
             if (_isNC)
             {
                 _soundTouch.Tempo = NC_TEMPO;
@@ -158,6 +159,14 @@ namespace osu_music
         public bool IsPlaying()
         {
             return OutputDevice.PlaybackState == PlaybackState.Playing;
+        }
+
+        public void Clear()
+        {
+            if(_soundTouch != null)
+            {
+                _soundTouch.Clear();
+            }
         }
 
         public void Dispose()

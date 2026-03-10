@@ -9,7 +9,7 @@ namespace osu_music
     {
         public string Title { get; }
         public string TitleUnicode { get; }
-        public string Path { get; }
+        public string SongPath { get; }
         public string[] AudioFiles { get; }
         public string[] OsuFiles { get; }
 
@@ -17,7 +17,7 @@ namespace osu_music
 
         public OsuSong(string songPath)
         {
-            Path = songPath;
+            SongPath = songPath;
 
             OsuFiles = GetOsuFiles();
             AudioFiles = GetAudioFiles();
@@ -28,7 +28,7 @@ namespace osu_music
 
         private string[] GetOsuFiles()
         {
-            return Directory.GetFiles(Path, "*.osu");
+            return Directory.GetFiles(SongPath, "*.osu");
         }
 
         public string[] GetOsuFiles(string songPath)
@@ -59,13 +59,9 @@ namespace osu_music
                     }
                 }
 
-                if(audioFile == null)
+                if(audioFile != null)
                 {
-                    audioFilesArr[i] = null;
-                }
-                else
-                {
-                    audioFilesArr[i] = System.IO.Path.Combine(Path, audioFile);
+                    audioFilesArr[i] = Path.Combine(SongPath, audioFile);
                 }
             }
 
@@ -125,24 +121,18 @@ namespace osu_music
 
             return titileUnicode;
         }
-
-        //FIX: Add seen array to check if all audio files dont exist
+        
+        //Todo:
         //ADD: .ogg support
         public string GetRandomAudio()
         {
             int randomIndex = _rnd.Next(AudioFiles.Length);
-            int count = 0;
 
-            while (count < 300)
+            string randomAudio = AudioFiles[randomIndex];
+
+            if (File.Exists(randomAudio) && Path.GetExtension(randomAudio) != ".ogg")
             {
-                if (File.Exists(AudioFiles[randomIndex]) && System.IO.Path.GetExtension(AudioFiles[randomIndex]) != ".ogg")
-                {
-                    return AudioFiles[randomIndex];
-                }
-                
-
-                randomIndex = _rnd.Next(AudioFiles.Length);
-                count++;
+                return AudioFiles[randomIndex];
             }
 
             return null;

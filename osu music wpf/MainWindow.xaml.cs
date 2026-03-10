@@ -57,16 +57,24 @@ namespace osu_music_wpf
             _timer = new DispatcherTimer();
             _timer.Interval = TimeSpan.FromSeconds(1);
             _timer.Tick += Timer_Tick;
+            _timer.Tick += UpdateTimeline;
             _timer.Start();
         }
 
         private void btna_Click(object sender, RoutedEventArgs e)
         {
             _playbackController.Stop();
+            _playbackController.Clear();
             _audioFile.Dispose();
 
             _song = _lib.RandomSong();
-            _audioFile = new AudioFileReader(_song.GetRandomAudio());
+            string randomAudio = _song.GetRandomAudio();
+
+            while (randomAudio == null)
+            {
+                randomAudio = _song.GetRandomAudio();
+            }
+            _audioFile = new AudioFileReader(randomAudio);
             _playbackController.PlaySong(_audioFile);
             SongName.Text = $"Now Playing: {_song.Title}";
 
@@ -94,7 +102,15 @@ namespace osu_music_wpf
                 _playbackController.Stop();
                 _audioFile.Dispose();
                 _song = _lib.RandomSong();
-                _audioFile = new AudioFileReader(_song.GetRandomAudio());
+
+                string randomAudio = _song.GetRandomAudio();
+
+                while (randomAudio == null)
+                {
+                    randomAudio = _song.GetRandomAudio();
+                }
+                _audioFile = new AudioFileReader(randomAudio);
+
                 _playbackController.PlaySong(_audioFile);
                 SongName.Text = $"Now Playing: {_song.Title}";
             }
@@ -128,7 +144,21 @@ namespace osu_music_wpf
                 _playbackController.Play();
                 btnPause.Content = "Pause";
             }
-
         }
+
+        private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
+
+        private void UpdateTimeline(object sender, EventArgs e)
+        {
+            if(_audioFile != null)
+            {
+                playbackbar.Value = (_audioFile.CurrentTime / _audioFile.TotalTime);
+            }
+            
+        }
+        
     }
-}
+} 

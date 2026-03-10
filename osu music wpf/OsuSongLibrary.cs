@@ -11,23 +11,26 @@ namespace osu_music
         public string OsuPath { get; set; }
         public string SongsPath { get; set; }
         public OsuSong[] OsuSongs { get; }
+        private string[] _songPaths;
 
         private Random _rnd = new Random();
 
         public OsuSongLibrary(string osuPath)
         {
             OsuPath = osuPath;
-            SongsPath = System.IO.Path.Combine(osuPath, "Songs");
+            SongsPath = Path.Combine(osuPath, "Songs");
 
             string[] songsPathList = SongsPathList();
+            _songPaths = Directory.GetDirectories(SongsPath);
 
-            OsuSongs = new OsuSong[songsPathList.Length];
+            //OsuSongs = new OsuSong[songsPathList.Length];
 
-            for (int i = 0; i < OsuSongs.Length; i++) {
-                OsuSong song = new OsuSong(songsPathList[i]);
-                OsuSongs[i] = song;
-                Debug.WriteLine($"Importing song #{i + 1}: {song.Title}");
-            }
+            //for (int i = 0; i < OsuSongs.Length; i++)
+            //{
+            //    OsuSong song = new OsuSong(songsPathList[i]);
+            //    OsuSongs[i] = song;
+            //    Debug.WriteLine($"Importing song #{i + 1}: {song.Title}");
+            //}
 
         }
 
@@ -43,9 +46,9 @@ namespace osu_music
 
         public OsuSong RandomSong()
         {
-            int randomSongIndex = _rnd.Next(0, OsuSongs.Length);
+            int randomIndex = _rnd.Next(0, _songPaths.Length);
 
-            return OsuSongs[randomSongIndex];
+            return new OsuSong(_songPaths[randomIndex]);
         }
     }
 }
