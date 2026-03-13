@@ -2,7 +2,7 @@
 
 A simple WPF desktop app to browse and play your local osu! song library.
 
-<img width="786" height="443" alt="image" src="https://github.com/user-attachments/assets/ea24d4c7-f9f8-4fd4-8162-1241ecebaaa8" />
+<img width="800" height="450" alt="osu_music_wpf_W9iURFbxtJ" src="https://github.com/user-attachments/assets/4827d60c-cecd-4bc9-88a9-55ab46268712" />
 
 ## Features
 
