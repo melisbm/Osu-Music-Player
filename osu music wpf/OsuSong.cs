@@ -130,9 +130,9 @@ namespace osu_music
 
             string randomAudio = AudioFiles[randomIndex];
 
-            if (File.Exists(randomAudio) && Path.GetExtension(randomAudio) != ".ogg")
+            if (File.Exists(randomAudio) && Path.GetExtension(randomAudio) == ".mp3")
             {
-                return AudioFiles[randomIndex];
+                return randomAudio;
             }
 
             return null;
